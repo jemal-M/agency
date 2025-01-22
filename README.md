@@ -1,8 +1,7 @@
 # Next.js + TypeScript + Shadcn UI Admin Dashboard
 A modern admin dashboard template using Next.js 14 with App Routing, TypeScript, and Shadcn UI.
 
-<img src="https://github.com/arhamkhnz/next-shadcn-admin-dashboard/blob/main/media/dashboard-lg.png?version=2" alt="Dashboard Screenshot" width="100%">
-
+ 
 ## Project Context
 
 This admin dashboard template is being built for a SaaS platform, providing flexibility and customization for specific use case.
