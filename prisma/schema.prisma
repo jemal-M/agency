@@ -1,0 +1,160 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int          @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  email       String       @unique
+  phone       String       @unique
+  password    String
+  startDate   DateTime?
+  department  String?
+  position    String?
+  salary      Float?
+  role        Role
+  partnerInfo PartnerInfo? // Relation name to avoid ambiguity
+  createdAt   DateTime?    @default(now())
+  updatedAt   DateTime?    @default(now())
+}
+
+model PartnerInfo {
+  id          Int       @id @default(autoincrement())
+  logo        String // Path to the logo image
+  name        String // Partner's name
+  address     String // Address of the partner
+  candidate   Candidate @relation(fields: [candidateId], references: [id]) // Relation to Candidate model
+  candidateId Int       @unique // Foreign key for Candidate
+  user        User?     @relation(fields: [userId], references: [id]) // Optional relation to User
+  userId      Int?      @unique // Enforces one-to-one relation with User
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @default(now())
+}
+
+model Expense {
+  id       Int    @id @default(autoincrement())
+  category String // Path to the logo image
+  amount   String
+  source   String
+
+  date      DateTime
+  // Enforces one-to-one relation with User
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+}
+
+model Income {
+  id       Int    @id @default(autoincrement())
+  category String // Path to the logo image
+  amount   String
+  source   String
+
+  date      DateTime
+  // Enforces one-to-one relation with User
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @default(now())
+}
+
+model Candidate {
+  id             Int          @id @default(autoincrement())
+  firstName      String
+  lastName       String
+  secondName     String
+  cocFile        String?
+  sex            String
+  hasCoc         String
+  branch         String?
+  hairColor      String
+  eyeColor       String
+  medical        String?
+  lmis           String?
+  embassy        String?
+  phone          String
+  passportNumber String
+  relativeName   String?
+  relativePhone  String?
+  address        String?
+  maritalStatus  String?
+  educationLevel String?
+  experience     String?
+  religion       String?
+  country        String?
+  placeOfBirth   String?
+  dateOfBirth    DateTime
+  contractPeriod Int?
+  monthlySalary  Float?
+  nationality    String?
+  height         Float?
+  weight         Float?
+  languages      String
+  issueDate      DateTime
+  expiryDate     DateTime
+  remarks        String?
+  passport       String?
+  photo3X4       String?
+  photo10X15     String?
+  selfIdCard     String?
+  relativeIdCard String?
+  relative       String?
+  skills         Skill[]
+  partnerInfo    PartnerInfo?
+}
+
+model Skill {
+  id           Int       @id @default(autoincrement())
+  name         String
+  isProficient Boolean // Whether the candidate is proficient in this skill
+  candidateId  Int
+  candidate    Candidate @relation(fields: [candidateId], references: [id])
+}
+
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WIDOWED
+}
+
+enum EducationLevel {
+  ELEMENTARY
+  HIGH_SCHOOL
+  COLLEGE
+  UNIVERSITY
+}
+
+enum LanguageProficiency {
+  NONE
+  POOR
+  AVERAGE
+  GOOD
+  EXCELLENT
+}
+
+model LoginAudit {
+  id             Int      @id @default(autoincrement())
+  email_or_phone String
+  status         String
+  createdAt      DateTime @default(now())
+  latitude       Decimal  @default(0.00)
+  longtude       Decimal  @default(0.00)
+}
+
+enum Role {
+  ADMIN
+  EMPLOYEE
+  PARTNER
+  TRAVEL_AGENT
+}
+
+enum CandidateStatus {
+  PENDING
+  INTERVIEWED
+  APPROVED
+  REJECTED
+}
